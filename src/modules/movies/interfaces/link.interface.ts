@@ -1,5 +1,6 @@
+import { RouterLinkProps } from 'vue-router'
 export interface Link {
     id: number;
     label: string;
-    to: string;
+    to: RouterLinkProps;
 }

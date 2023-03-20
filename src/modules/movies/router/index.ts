@@ -12,6 +12,11 @@ const router: Array<RouteRecordRaw> = [
                 component: () => import('@/modules/movies/pages/Popular.vue'),
             },
             {
+                path: 'favorites',
+                name: 'favorites',
+                component: () => import('@/modules/movies/pages/Favorites.vue'),
+            },
+            {
                 path: '/:pathMatch(.*)*',
                 redirect: { name: 'popular' }
             }
