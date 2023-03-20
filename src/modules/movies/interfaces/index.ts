@@ -1,2 +1,2 @@
 export { Link } from './link.interface';
-export { PopularMovies } from './popular-movies.interface';
+export { PopularMovies, Result, OriginalLanguage } from './popular-movies.interface';

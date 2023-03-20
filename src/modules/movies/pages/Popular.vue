@@ -1,36 +1,60 @@
 <template>
-    <div class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
+    <div class="flex flex-wrap flex-col ">
+        <div class="flex flex-row flex-wrap justify-end items-center">
+            <nav class=" hidden sm:flex flex-row flex-wrap justify-end items-center my-4">
+                <p class="mr-4"><span class="font-semibold mr-3">Showing:</span> page {{ popularMovies.page }} of {{
+                    popularMovies.total_pages }}</p>
+                <ul class="inline-flex -space-x-px">
+                    <li>
+                        <button @click="prevPage"
+                            class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous
+                            Page</button>
+                    </li>
 
-        <div v-for="movie in popularMovies.results" :key="movie.id"
-            class="max-w-sm bg-white border border-gray-200 rounded-lg  dark:bg-white shadow-2xl   ">
-            <a :href="`${imageUrl}${movie.backdrop_path}`">
-                <img class="rounded-t-lg" :src="`${imageUrl}${movie.backdrop_path}`" :alt="movie.title" />
-            </a>
-            <div class="p-5">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-violet-900 ">{{ movie.title }}</h5>
-                <p class="mb-3 font-normal text-gray-700 ">{{ movie.overview }}.</p>
+                    <li>
+                        <button @click="nextPage"
+                            class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next
+                            Page</button>
+                    </li>
+                </ul>
 
-                <p class="mb-3  font-normal text-gray-700 "> <span class="font-bold mr-2">Release
-                        Date:</span> {{
-                            movie.release_date }}</p>
+            </nav>
+        </div>
 
-                <p class="mb-3  font-normal text-gray-700 "> <span class="font-bold mr-2">Rating:</span>
-                    {{
-                        movie.vote_average }}</p>
+        <div class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
 
-                <p class="mb-3  font-normal text-gray-700 "> <span class="font-bold mr-2">Votes:</span> {{
-                    movie.vote_count }}</p>
-                <a href="#"
-                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    Read more
-                    <svg aria-hidden="true" class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                            clip-rule="evenodd"></path>
-                    </svg>
+            <div v-for="movie in popularMovies.results" :key="movie.id"
+                class="max-w-sm bg-white border border-gray-200 rounded-lg  dark:bg-white shadow-2xl   ">
+                <a :href="`${imageUrl}${movie.backdrop_path}`" target="_blank">
+                    <img class="rounded-t-lg" :src="`${imageUrl}${movie.backdrop_path}`" :alt="movie.title" />
                 </a>
+                <div class="p-5">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-violet-900 ">{{ movie.title }}</h5>
+                    <p class="mb-3 font-normal text-gray-700 ">{{ movie.overview }}.</p>
+
+                    <p class="mb-3  font-normal text-gray-700 "> <span class="font-bold mr-2">Release
+                            Date:</span> {{
+                                movie.release_date }}</p>
+
+                    <p class="mb-3  font-normal text-gray-700 "> <span class="font-bold mr-2">Rating:</span>
+                        {{
+                            movie.vote_average }}</p>
+
+                    <p class="mb-3  font-normal text-gray-700 "> <span class="font-bold mr-2">Votes:</span> {{
+                        movie.vote_count }}</p>
+                    <button @click="() => addFavorites(movie)"
+                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                        </svg>
+                        añadir a favoritos
+
+                    </button>
+                </div>
             </div>
+
         </div>
 
     </div>
@@ -38,17 +62,47 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
-import getPopularMovies from '@/modules/movies/composables/getPopularMovies';
 import { enviroment } from '@/env';
+import { Result } from '@/modules/movies/interfaces'
+import getPopularMovies from '@/modules/movies/composables/getPopularMovies';
 
 export default defineComponent({
     setup() {
         const { popularMovies, error, load } = getPopularMovies();
+
         load();
 
         const imageUrl = computed(() => enviroment.imageUrl);
 
-        return { popularMovies, imageUrl };
+        const prevPage = async () => {
+            if (popularMovies.value.page === 1) return;
+            await load(--popularMovies.value.page);
+        }
+        const nextPage = async () => {
+            if (popularMovies.value.page === popularMovies.value.total_pages) return;
+            await load(++popularMovies.value.page);
+        }
+
+        const addFavorites = (movie: Result) => {
+            // Obtenemos de localStorage
+            let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
+
+            // Verificamos si ya fue seleccionada como favorita
+            const existByid = favoriteList.some(movieDb => movieDb.id === movie.id);
+
+            if (!existByid) {
+                favoriteList.push(movie);
+                localStorage.setItem('favorites', JSON.stringify(favoriteList));
+            } else {
+                favoriteList = favoriteList.filter(movieDb => movieDb.id !== movie.id);
+                localStorage.setItem('favorites', JSON.stringify(favoriteList));
+            }
+        }
+
+        return {
+            popularMovies, imageUrl, prevPage,
+            nextPage, addFavorites,
+        };
     }
 })
 </script>
