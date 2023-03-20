@@ -2,17 +2,24 @@
     <div class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
 
         <div v-for="movie in popularMovies.results" :key="movie.id"
-            class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
-            <a :href="`${imageUrl}${movie.backdrop_path}`" >
+            class="max-w-sm bg-white border border-gray-200 rounded-lg  dark:bg-white shadow-2xl   ">
+            <a :href="`${imageUrl}${movie.backdrop_path}`">
                 <img class="rounded-t-lg" :src="`${imageUrl}${movie.backdrop_path}`" :alt="movie.title" />
             </a>
             <div class="p-5">
-                <a href="#">
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology
-                        acquisitions 2021</h5>
-                </a>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology
-                    acquisitions of 2021 so far, in reverse chronological order.</p>
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-violet-900 ">{{ movie.title }}</h5>
+                <p class="mb-3 font-normal text-gray-700 ">{{ movie.overview }}.</p>
+
+                <p class="mb-3  font-normal text-gray-700 "> <span class="font-bold mr-2">Release
+                        Date:</span> {{
+                            movie.release_date }}</p>
+
+                <p class="mb-3  font-normal text-gray-700 "> <span class="font-bold mr-2">Rating:</span>
+                    {{
+                        movie.vote_average }}</p>
+
+                <p class="mb-3  font-normal text-gray-700 "> <span class="font-bold mr-2">Votes:</span> {{
+                    movie.vote_count }}</p>
                 <a href="#"
                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     Read more
