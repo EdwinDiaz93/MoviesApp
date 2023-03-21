@@ -5,7 +5,7 @@
         </div>
 
         <div class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
-            <card :popularMovies="popularMovies" @on-add="addFavorites">
+            <card :popularMovies="popularMovies" >
                 <template #fav="{ movie }">
 
                     <button @click="() => addFavorites(movie)"
@@ -39,7 +39,6 @@ export default defineComponent({
         paginator: Paginator,
         card: Card,
     },
-    emits: ['onAdd'],
     setup() {
         const { popularMovies, load } = getPopularMovies();
 
@@ -68,10 +67,6 @@ export default defineComponent({
                 localStorage.setItem('favorites', JSON.stringify(favoriteList));
             }
 
-            // else {
-            //     favoriteList = favoriteList.filter(movieDb => movieDb.id !== movie.id);
-            //     localStorage.setItem('favorites', JSON.stringify(favoriteList));
-            // }
         }
 
         return {

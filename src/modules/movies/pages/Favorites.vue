@@ -4,7 +4,7 @@
             <card :popularMovies="popularMovies" @on-add="removeFavorites">
                 <template #fav="{ movie }">
                     <button @click="() => removeFavorites(movie)"
-                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white border-2 bg-red-600 rounded-md hover:text-red-600 hover:border-red-600 hover:bg-white transition-all ease-out duration-700">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -32,7 +32,7 @@ export default defineComponent({
         paginator: Paginator,
         card: Card,
     },
-    emits: ['onAdd'],
+    
     setup() {
         const imageUrl = computed(() => enviroment.imageUrl);
 

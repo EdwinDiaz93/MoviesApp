@@ -13,10 +13,20 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/movies',
     name: 'movies',
+    beforeEnter: (to, from, next) => {
+      const user = JSON.parse(localStorage.getItem('user')!) || null;
+
+      if (!user) {
+        return next({ path: '/auth/login', replace: true })
+      } else {
+        return next();
+      }
+    },
     children: [
       ...moviesRouter,
     ],
-  }
+  },
+
 ]
 
 const router = createRouter({
