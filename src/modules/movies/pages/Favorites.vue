@@ -1,7 +1,8 @@
 <template>
     <div class="flex flex-wrap flex-col ">
-        <div class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
-            <card :popularMovies="popularMovies" @on-add="removeFavorites">
+        <div v-if="popularMovies.results.length"
+            class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
+            <card :popularMovies="popularMovies">
                 <template #fav="{ movie }">
                     <button @click="() => removeFavorites(movie)"
                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white border-2 bg-red-600 rounded-md hover:text-red-600 hover:border-red-600 hover:bg-white transition-all ease-out duration-700">
@@ -15,6 +16,7 @@
                 </template>
             </card>
         </div>
+        <p v-else class="text-center text-4xl font-semibold ">There is no favorites in the list</p>
     </div>
 </template>
 

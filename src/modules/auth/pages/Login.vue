@@ -28,6 +28,7 @@ import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ValidateLogin } from '@/modules/auth/interfaces'
+import Swal from "sweetalert2";
 
 
 export default defineComponent({
@@ -43,7 +44,19 @@ export default defineComponent({
 
     const handleSubmit = () => {
       store.dispatch('auth/login', user.value);
-      push({ path: '/movies/popular', replace: true });
+      if (localStorage.getItem('user')) {
+        push({ path: '/movies/popular', replace: true });
+      } else {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Invalid Credentials',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        localStorage.removeItem('user');
+        return;
+      }
     }
 
     return { handleSubmit, user };
