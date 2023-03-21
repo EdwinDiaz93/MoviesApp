@@ -57,7 +57,13 @@ export default defineComponent({
                     localStorage.removeItem('favorites');
                     push({ path: '/auth/login', replace: true });
 
-                    Swal.fire('Hasta Pronto', '', 'success')
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'See ya',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                 }
             });
 

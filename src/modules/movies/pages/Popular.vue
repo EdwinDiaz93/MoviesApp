@@ -5,7 +5,7 @@
         </div>
 
         <div class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
-            <card :popularMovies="popularMovies" >
+            <card :popularMovies="popularMovies">
                 <template #fav="{ movie }">
 
                     <button @click="() => addFavorites(movie)"
@@ -26,6 +26,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
+import Swal from 'sweetalert2';
 
 import Paginator from '@/modules/movies/components/Paginator.vue';
 import Card from '@/modules/movies/components/Card.vue';
@@ -65,6 +66,22 @@ export default defineComponent({
             if (!existByid) {
                 favoriteList.push(movie);
                 localStorage.setItem('favorites', JSON.stringify(favoriteList));
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Added to the favorite list',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+            } else {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: 'Already added to the favorite list',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             }
 
         }
