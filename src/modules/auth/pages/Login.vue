@@ -38,7 +38,7 @@ export default defineComponent({
 
     const user = ref<ValidateLogin>({
       username: 'EdwinDiaz933',
-      password: 'Portgas123#',
+      password: 'Stryder357',
       request_token: '',
     });
 
