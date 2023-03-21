@@ -44,19 +44,7 @@ export default defineComponent({
 
     const handleSubmit = () => {
       store.dispatch('auth/login', user.value);
-      if (localStorage.getItem('user')) {
-        push({ path: '/movies/popular', replace: true });
-      } else {
-        Swal.fire({
-          position: 'center',
-          icon: 'error',
-          title: 'Invalid Credentials',
-          showConfirmButton: false,
-          timer: 1500
-        });
-        localStorage.removeItem('user');
-        return;
-      }
+      push({ path: '/movies/popular', replace: true });
     }
 
     return { handleSubmit, user };
