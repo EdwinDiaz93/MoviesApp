@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import Swal from 'sweetalert2';
 
 import MovieService from '@/modules/movies/services';
@@ -33,31 +33,35 @@ import Paginator from '@/modules/movies/components/Paginator.vue';
 import Card from '@/modules/movies/components/Card.vue';
 
 import { enviroment } from '@/env';
-import { Result } from '@/modules/movies/interfaces'
-import getPopularMovies from '@/modules/movies/composables/getPopularMovies';
+import { PopularMovies, Result } from '@/modules/movies/interfaces'
 
+const popularMovies = ref<PopularMovies>({
+    page: 1,
+    results: [],
+    total_pages: 1,
+    total_results: 1,
+});
 
-const { popularMovies, load } = getPopularMovies();
+MovieService.getPopularMovies()
+    .then(movies => {
+        popularMovies.value = movies;
+    });
 
-load();
 
 const imageUrl = computed(() => enviroment.imageUrl);
 
-const prevPage = async () => {
+const prevPage = () => {
     if (popularMovies.value.page === 1) return;
-    await load(--popularMovies.value.page);
+    MovieService.getPopularMovies(--popularMovies.value.page)
+        .then(movies => popularMovies.value = movies);
 }
-const nextPage = async () => {
+const nextPage = () => {
     if (popularMovies.value.page === popularMovies.value.total_pages) return;
-    await load(++popularMovies.value.page);
+    MovieService.getPopularMovies(++popularMovies.value.page)
+        .then(movies => popularMovies.value = movies);
 }
 
 const addFavorites = (movie: Result): void => {
-
-
-    const user = JSON.parse(localStorage.getItem('user')!) || null;
-
-    if (!user) return;
 
     const favorite = {
         media_type: "movie",
@@ -66,7 +70,7 @@ const addFavorites = (movie: Result): void => {
     };
 
     MovieService
-        .markAsFavorite(`${enviroment.baseUrl}3/account/${user.account_id}/favorite?api_key=${enviroment.api_key}&session_id=${user.session_id}`, 'POST', favorite)
+        .markAsFavorite(favorite)
         .then(markResponse => {
             if (markResponse.status_code === 1) {
                 Swal.fire({

@@ -27,6 +27,7 @@ import { Result, PopularMovies } from '@/modules/movies/interfaces';
 
 import Card from '@/modules/movies/components/Card.vue';
 import Swal from "sweetalert2";
+import MoviesService from "../services";
 
 const imageUrl = computed(() => enviroment.imageUrl);
 
@@ -38,27 +39,28 @@ const popularMovies = ref<PopularMovies>({
     total_results: 1,
 });
 
-const loadStorage = () => {
-    let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
-    popularMovies.value.results = favoriteList;
-}
+MoviesService.getFavorites().then(
+    (movies) => {
+        popularMovies.value = movies;
+    }
+);
 
-loadStorage();
 
 const removeFavorites = (movie: Result): void => {
-    // Obtenemos de localStorage
-    let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
+    console.log('hey');
+    // // Obtenemos de localStorage
+    // let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
 
-    favoriteList = favoriteList.filter(movieDb => movieDb.id !== movie.id);
-    localStorage.setItem('favorites', JSON.stringify(favoriteList));
-    popularMovies.value.results = favoriteList;
-    Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Deleted succesfully',
-        showConfirmButton: false,
-        timer: 1500
-    });
+    // favoriteList = favoriteList.filter(movieDb => movieDb.id !== movie.id);
+    // localStorage.setItem('favorites', JSON.stringify(favoriteList));
+    // popularMovies.value.results = favoriteList;
+    // Swal.fire({
+    //     position: 'center',
+    //     icon: 'success',
+    //     title: 'Deleted succesfully',
+    //     showConfirmButton: false,
+    //     timer: 1500
+    // });
 }
 
 </script>
