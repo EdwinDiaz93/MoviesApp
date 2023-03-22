@@ -1,10 +1,10 @@
 import { ref } from 'vue';
 import { enviroment } from '@/env';
-import { RequestToken } from '@/modules/auth/interfaces';
+import { TokenResponse } from '@/modules/auth/interfaces';
 
 const getSessionId = () => {
 
-    const sessionId = ref<RequestToken>({
+    const sessionId = ref<TokenResponse>({
         expires_at: '',
         request_token: '',
         success: false,
@@ -25,7 +25,7 @@ const getSessionId = () => {
             if (!response.ok) {
                 throw Error('Data not created');
             }
-            const data: RequestToken = await response.json();
+            const data: TokenResponse = await response.json();
             sessionId.value = { ...data };
         } catch (err: any) {
             error.value = err.message;

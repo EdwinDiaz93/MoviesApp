@@ -1,3 +1,4 @@
-export { ValidateLogin } from './validate-login.interface';
-export { RequestToken } from './request-token.interface';
+export { LoginCredentials } from './login-credentials.interface';
+export { TokenResponse } from './token-response.interface';
+export { UnAuthorize } from './/unauthorize.interface';
 export { Profile, Gravatar, Avatar } from './profile.interface';

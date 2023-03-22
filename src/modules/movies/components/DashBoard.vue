@@ -50,13 +50,13 @@ import { computed, defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2';
 
-import { ValidateLogin } from '@/modules/auth/interfaces';
+import { LoginCredentials } from '@/modules/auth/interfaces';
 import NavBar from '@/modules/movies/components/NavBar.vue'
 export default defineComponent({
     components: { NavBar },
     setup() {
         const showBar = ref(true);
-        const user: ValidateLogin = JSON.parse(localStorage.getItem('user')!) || '';
+        const user: LoginCredentials = JSON.parse(localStorage.getItem('user')!) || '';
         const session = computed(() => user.username);
         const { push } = useRouter();
 
