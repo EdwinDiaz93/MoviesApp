@@ -1,10 +1,10 @@
 import { ref } from 'vue';
 import { enviroment } from '@/env';
-import { RequestToken, ValidateLogin } from '@/modules/auth/interfaces';
+import { TokenResponse, LoginCredentials } from '@/modules/auth/interfaces';
 
-const validatedLogin = () => {
+const validateLogin = () => {
 
-    const session = ref<RequestToken>({
+    const validToken = ref<TokenResponse>({
         expires_at: '',
         request_token: '',
         success: false
@@ -12,7 +12,7 @@ const validatedLogin = () => {
 
     let error = ref(null);
 
-    const createSession = async (credentials: ValidateLogin) => {
+    const revalidateToken = async (credentials: LoginCredentials) => {
         try {
             const response = await fetch(`${enviroment.baseUrl}/3/authentication/token/validate_with_login?api_key=${enviroment.api_key}`, {
                 body: JSON.stringify(credentials),
@@ -25,14 +25,14 @@ const validatedLogin = () => {
             if (!response.ok) {
                 throw Error('Data not created');
             }
-            const data: RequestToken = await response.json();
-            session.value = { ...data };
+            const data: TokenResponse = await response.json();
+            validToken.value = { ...data };
         } catch (err: any) {
             error.value = err.message;
             console.log(error.value);
         }
     }
-    return { session, error, createSession };
+    return { validToken, error, revalidateToken };
 }
 
-export default validatedLogin
+export default validateLogin

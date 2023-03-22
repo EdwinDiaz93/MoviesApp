@@ -3,8 +3,8 @@
 
     <form @submit.prevent="handleSubmit" autoComplete='off'
       class=' w-auto sm:w-1/3 h-auto px-5 py-10 shadow-2xl grid grid-cols-1 gap-1'>
-      <h2 class='text-center text-2xl md:text-4xl font-bold mb-2'>Login Form</h2>
-
+      <h2 class='text-center text-2xl md:text-4xl font-bold mb-2'>Login Form</h2>      
+      <p v-if="loginError.status" class="font-semibold text-center text-red-500">{{ loginError.message }}</p>
       <div class='grid grid-cols-1 gap-1'>
         <label for='email' class='font-bold'>Username:</label>
         <input v-model="user.username" id='email' type="text" placeholder='correo@correo.com'
@@ -23,33 +23,26 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script setup lang="ts">
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { ValidateLogin } from '@/modules/auth/interfaces'
-import Swal from "sweetalert2";
+import { LoginCredentials } from '@/modules/auth/interfaces'
+const store = useStore();
+const { push } = useRouter();
 
+const user = ref<LoginCredentials>({
+  username: '',
+  password: '',
+});
 
-export default defineComponent({
-  setup() {
-    const store = useStore();
-    const { push } = useRouter();
+const handleSubmit = async() => {
+ await store.dispatch('auth/login', user.value);  
+  push({ path: '/movies/popular', replace: true });
+}
 
-    const user = ref<ValidateLogin>({
-      username: 'EdwinDiaz933',
-      password: 'Stryder357',
-      request_token: '',
-    });
+const loginError = computed(() => store.state.auth.loginError);
 
-    const handleSubmit = () => {
-      store.dispatch('auth/login', user.value);
-      push({ path: '/movies/popular', replace: true });
-    }
-
-    return { handleSubmit, user };
-  }
-})
 </script>
 
 <style></style>

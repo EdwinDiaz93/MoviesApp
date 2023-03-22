@@ -1,4 +1,4 @@
-import {  RouteRecordRaw } from 'vue-router'
+import { RouteRecordRaw } from 'vue-router'
 
 const router: Array<RouteRecordRaw> = [
     {
@@ -7,8 +7,16 @@ const router: Array<RouteRecordRaw> = [
         children: [
             {
                 path: 'login',
-                name:'login',
+                name: 'login',
                 component: () => import('@/modules/auth/pages/Login.vue'),
+                beforeEnter(to, from, next) {
+                    const user = JSON.parse(localStorage.getItem('user')!) || null;
+                    if (!user) {
+                        return next();
+                    } else {
+                        return next({ path: '/movies/popular', replace: true })
+                    }
+                }
             },
             {
                 path: '/:pathMatch(.*)*',

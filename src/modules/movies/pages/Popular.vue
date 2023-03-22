@@ -4,7 +4,8 @@
             <paginator :PopularMovies="popularMovies" @on-next="nextPage" @on-prev="prevPage"></paginator>
         </div>
 
-        <div class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
+        <div v-if="popularMovies.results"
+            class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
             <card :popularMovies="popularMovies">
                 <template #fav="{ movie }">
 
@@ -24,74 +25,64 @@
     </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 import Swal from 'sweetalert2';
+
+import { MarkResponse, PopularMovies, PostFavorite, Result } from '@/modules/movies/interfaces'
 
 import Paginator from '@/modules/movies/components/Paginator.vue';
 import Card from '@/modules/movies/components/Card.vue';
 
-import { enviroment } from '@/env';
-import { Result } from '@/modules/movies/interfaces'
-import getPopularMovies from '@/modules/movies/composables/getPopularMovies';
 
-export default defineComponent({
-    components: {
-        paginator: Paginator,
-        card: Card,
-    },
-    setup() {
-        const { popularMovies, load } = getPopularMovies();
+const store = useStore();
 
-        load();
+store.dispatch('movies/getPopularMovies');
+const popularMovies = computed<PopularMovies>(() => store.state.movies.popularMovies);
 
-        const imageUrl = computed(() => enviroment.imageUrl);
+const prevPage = () => {
+    if (popularMovies.value.page === 1) return;
+    store.dispatch('movies/getPopularMovies', --popularMovies.value.page);
+}
+const nextPage = () => {
+    if (popularMovies.value.page === popularMovies.value.total_pages) return;
+    store.dispatch('movies/getPopularMovies', ++popularMovies.value.page);
+}
 
-        const prevPage = async () => {
-            if (popularMovies.value.page === 1) return;
-            await load(--popularMovies.value.page);
-        }
-        const nextPage = async () => {
-            if (popularMovies.value.page === popularMovies.value.total_pages) return;
-            await load(++popularMovies.value.page);
-        }
+const addFavorites = async (movie: Result) => {
 
-        const addFavorites = (movie: Result): void => {
-            // Obtenemos de localStorage
-            let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
+    const favorite: PostFavorite = {
+        media_type: "movie",
+        media_id: movie.id,
+        favorite: true
+    };
 
-            // Verificamos si ya fue seleccionada como favorita
-            const existByid = favoriteList.some(movieDb => movieDb.id === movie.id);
+    await store.dispatch('movies/addFavoriteMovie', favorite);
 
-            if (!existByid) {
-                favoriteList.push(movie);
-                localStorage.setItem('favorites', JSON.stringify(favoriteList));
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Added to the favorite list',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+    const response = computed<MarkResponse>(() => store.state.movies.markedResponse);
 
-            } else {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'warning',
-                    title: 'Already added to the favorite list',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
-
-        }
-
-        return {
-            popularMovies, imageUrl, prevPage,
-            nextPage, addFavorites,
-        };
+    if (response.value.status_code === 1) {
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Marked as a favorite movie',
+            showConfirmButton: false,
+            timer: 1500
+        });
     }
-});
+
+    if (response.value.status_code === 12) {
+        Swal.fire({
+            position: 'center',
+            icon: 'info',
+            title: 'Already marked as a favorite movie',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+
+}     
 </script>
 
 <style></style>

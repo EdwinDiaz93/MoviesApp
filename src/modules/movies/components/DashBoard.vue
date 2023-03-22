@@ -45,53 +45,49 @@
     </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref } from 'vue'
+<script lang="ts" setup>
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+
 import Swal from 'sweetalert2';
 
-import { ValidateLogin } from '@/modules/auth/interfaces';
 import NavBar from '@/modules/movies/components/NavBar.vue'
-export default defineComponent({
-    components: { NavBar },
-    setup() {
-        const showBar = ref(true);
-        const user: ValidateLogin = JSON.parse(localStorage.getItem('user')!) || '';
-        const session = computed(() => user.username);
-        const { push } = useRouter();
 
-        const handleLogout = () => {
+const showBar = ref(true);
+
+const user = JSON.parse(localStorage.getItem('user')!) || null;
+const session = computed(() => user.username);
+
+const { push } = useRouter();
+
+const handleLogout = () => {
+    Swal.fire({
+        title: 'Do you realy want sign out from de movie app?',
+        showCancelButton: true,
+        confirmButtonText: 'Salir',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('user');
+            push({ path: '/auth/login', replace: true });
+
             Swal.fire({
-                title: 'Do you realy want sign out from de movie app?',
-                showCancelButton: true,
-                confirmButtonText: 'Salir',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    localStorage.removeItem('user');
-                    push({ path: '/auth/login', replace: true });
-
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'See you later',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                }
+                position: 'center',
+                icon: 'success',
+                title: 'See you later',
+                showConfirmButton: false,
+                timer: 1500
             });
-
         }
+    });
 
-        const showProfile = () => {
-            push({ name: 'profile' });
-        }
+}
+
+const showProfile = () => {
+    push({ name: 'profile' });
+}
 
 
-        return { showBar, session, handleLogout, showProfile };
-    }
-
-})
 </script>
 
 <style></style>
