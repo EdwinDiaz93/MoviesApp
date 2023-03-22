@@ -13,6 +13,10 @@ const state: MoviesState = {
         total_pages: 1,
         total_results: 1,
     },
+    markedResponse: {
+        status_code: 0,
+        status_message: ''
+    }
 };
 
 export default state;

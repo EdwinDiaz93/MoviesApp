@@ -26,24 +26,24 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 import Swal from 'sweetalert2';
 
-import MovieService from '@/modules/movies/services';
+import { enviroment } from '@/env';
+import { MarkResponse, PopularMovies, PostFavorite, Result } from '@/modules/movies/interfaces'
+
 import Paginator from '@/modules/movies/components/Paginator.vue';
 import Card from '@/modules/movies/components/Card.vue';
 
-import { enviroment } from '@/env';
-import { PopularMovies, Result } from '@/modules/movies/interfaces'
 
 const store = useStore();
 
 store.dispatch('movies/getPopularMovies');
+const popularMovies = computed<PopularMovies>(() => store.state.movies.popularMovies);
 
-const popularMovies = computed(() => store.state.movies.popularMovies);
+const imageUrl = computed<String>(() => enviroment.imageUrl);
 
-const imageUrl = computed(() => enviroment.imageUrl);
 
 const prevPage = () => {
     if (popularMovies.value.page === 1) return;
@@ -54,38 +54,38 @@ const nextPage = () => {
     store.dispatch('movies/getPopularMovies', ++popularMovies.value.page);
 }
 
-const addFavorites = (movie: Result): void => {
+const addFavorites = async (movie: Result) => {
 
-    const favorite = {
+    const favorite: PostFavorite = {
         media_type: "movie",
         media_id: movie.id,
         favorite: true
     };
 
-    MovieService
-        .markAsFavorite(favorite)
-        .then(markResponse => {
-            if (markResponse.status_code === 1) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Marked as a favorite movie',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
+    await store.dispatch('movies/addFavoriteMovie', favorite);
 
-            if (markResponse.status_code === 12) {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'info',
-                    title: 'Already marked as a favorite movie',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
+    const response = computed<MarkResponse>(() => store.state.movies.markedResponse);
 
+    if (response.value.status_code === 1) {
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Marked as a favorite movie',
+            showConfirmButton: false,
+            timer: 1500
         });
+    }
+
+    if (response.value.status_code === 12) {
+        Swal.fire({
+            position: 'center',
+            icon: 'info',
+            title: 'Already marked as a favorite movie',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+
 }     
 </script>
 
