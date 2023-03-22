@@ -6,7 +6,7 @@
             </li>
 
             <li v-for="item in links" :key="item.id" class="text-center border-b-2 p-2 flex flex-row flex-wrap hover:bg-violet-500 text-violet-500 transit
-                                ease-in-out duration-700 hover:text-white">
+                                    ease-in-out duration-700 hover:text-white">
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="w-6 h-6">
@@ -19,27 +19,23 @@
     </nav>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script lang="ts" setup>
+import { ref } from 'vue';
 import { Link } from '@/modules/movies/interfaces';
-export default defineComponent({
-    setup() {
-        const links = ref<Link[]>([
-            {
-                id: 1,
-                label: 'Popular',
-                to: { to: { name: 'popular' } }
-            },
-            {
-                id: 1,
-                label: 'Favoritos',
-                to: { to: { name: 'favorites' } }
-            }
-        ]);
 
-        return { links }
+const links = ref<Link[]>([
+    {
+        id: 1,
+        label: 'Popular',
+        to: { to: { name: 'popular' } }
+    },
+    {
+        id: 1,
+        label: 'Favoritos',
+        to: { to: { name: 'favorites' } }
     }
-})
+]);
+
 </script>
 
 <style></style>

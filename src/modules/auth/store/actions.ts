@@ -35,8 +35,12 @@ const actions = {
         } catch (error: any) {
             console.log(error);
         }
-
-
+    },
+    async getProfile({ commit }: any) {
+        const user = JSON.parse(localStorage.getItem('user')!) || null;
+        if (!user) return Promise.reject('User not found');
+        const profile = await AuthService.getAccountId(user.session_id);
+        commit('setProfile',profile);
     }
 }
 

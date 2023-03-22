@@ -10,12 +10,14 @@
 </template>
 
 <script lang="ts" setup>
-import getProfileDetails from '@/modules/movies/composables/getProfileDetails';
 
-const { profileDetails, load } = getProfileDetails();
-const user = JSON.parse(localStorage.getItem('user')!) || null;
-load(user.session_id);
+import { Profile } from '@/modules/auth/interfaces';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
+store.dispatch('auth/getProfile');
+const profileDetails = computed<Profile>(() => store.state.auth.profile);
 </script>
 
 <style></style>

@@ -30,7 +30,6 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import Swal from 'sweetalert2';
 
-import { enviroment } from '@/env';
 import { MarkResponse, PopularMovies, PostFavorite, Result } from '@/modules/movies/interfaces'
 
 import Paginator from '@/modules/movies/components/Paginator.vue';
@@ -41,9 +40,6 @@ const store = useStore();
 
 store.dispatch('movies/getPopularMovies');
 const popularMovies = computed<PopularMovies>(() => store.state.movies.popularMovies);
-
-const imageUrl = computed<String>(() => enviroment.imageUrl);
-
 
 const prevPage = () => {
     if (popularMovies.value.page === 1) return;

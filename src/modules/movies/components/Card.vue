@@ -25,24 +25,20 @@
     </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from "vue";
+<script lang="ts" setup >
+import { computed } from "vue";
 import { enviroment } from '@/env'
 
-export default defineComponent({
-    props: {
-        popularMovies: {
-            type: Object,
-            required: true
-        }
-    },
-    setup(props) {
-        const popularMovies = computed(() => props.popularMovies);
-        const imageUrl = computed(() => enviroment.imageUrl);
-
-        return { popularMovies, imageUrl };
+const props = defineProps({
+    popularMovies: {
+        type: Object,
+        required: true
     }
-});
+})
+
+const popularMovies = computed(() => props.popularMovies);
+const imageUrl = computed(() => enviroment.imageUrl);
+
 </script>
 
 <style></style>
