@@ -32,8 +32,8 @@ const store = useStore();
 const { push } = useRouter();
 
 const user = ref<LoginCredentials>({
-  username: 'EdwinDiaz933',
-  password: 'Stryder357',
+  username: '',
+  password: '',
 });
 
 const handleSubmit = async() => {
