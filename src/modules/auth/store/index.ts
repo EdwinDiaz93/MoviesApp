@@ -3,7 +3,7 @@ import { ValidateLogin } from '@/modules/auth/interfaces'
 import getRequestToken from '@/modules/auth/composables/getRequestToken';
 import validatedLogin from '@/modules/auth/composables/validateLogin';
 import getSessionId from '@/modules/auth/composables/getSessionId';
-import Swal from 'sweetalert2';
+
 const authStore = {
   state: {
     session: {

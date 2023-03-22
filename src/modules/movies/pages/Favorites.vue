@@ -20,60 +20,47 @@
     </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+<script lang="ts" setup>
+import { computed, ref } from "vue";
 import { enviroment } from "@/env";
 import { Result, PopularMovies } from '@/modules/movies/interfaces';
 
-import Paginator from '@/modules/movies/components/Paginator.vue';
 import Card from '@/modules/movies/components/Card.vue';
 import Swal from "sweetalert2";
 
-export default defineComponent({
-    components: {
-        paginator: Paginator,
-        card: Card,
-    },
-
-    setup() {
-        const imageUrl = computed(() => enviroment.imageUrl);
+const imageUrl = computed(() => enviroment.imageUrl);
 
 
-        const popularMovies = ref<PopularMovies>({
-            page: 1,
-            results: [],
-            total_pages: 1,
-            total_results: 1,
-        });
+const popularMovies = ref<PopularMovies>({
+    page: 1,
+    results: [],
+    total_pages: 1,
+    total_results: 1,
+});
 
-        const loadStorage = () => {
-            let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
-            popularMovies.value.results = favoriteList;
-        }
+const loadStorage = () => {
+    let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
+    popularMovies.value.results = favoriteList;
+}
 
-        loadStorage();
+loadStorage();
 
-        const removeFavorites = (movie: Result): void => {
-            // Obtenemos de localStorage
-            let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
+const removeFavorites = (movie: Result): void => {
+    // Obtenemos de localStorage
+    let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
 
-            favoriteList = favoriteList.filter(movieDb => movieDb.id !== movie.id);
-            localStorage.setItem('favorites', JSON.stringify(favoriteList));
-            popularMovies.value.results = favoriteList;
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Deleted succesfully',
-                showConfirmButton: false,
-                timer: 1500
-            });
-        }
+    favoriteList = favoriteList.filter(movieDb => movieDb.id !== movie.id);
+    localStorage.setItem('favorites', JSON.stringify(favoriteList));
+    popularMovies.value.results = favoriteList;
+    Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Deleted succesfully',
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
 
-        return {
-            popularMovies, imageUrl, removeFavorites
-        };
-    }
-})
 </script>
 
 <style></style>

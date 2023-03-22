@@ -9,19 +9,13 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
 import getProfileDetails from '@/modules/movies/composables/getProfileDetails';
 
-export default defineComponent({
-    setup() {
-        const { profileDetails, load } = getProfileDetails();
-        const user = JSON.parse(localStorage.getItem('user')!) || null;
-        load(user.session_id);
+const { profileDetails, load } = getProfileDetails();
+const user = JSON.parse(localStorage.getItem('user')!) || null;
+load(user.session_id);
 
-        return { profileDetails };
-    }
-});
 </script>
 
 <style></style>

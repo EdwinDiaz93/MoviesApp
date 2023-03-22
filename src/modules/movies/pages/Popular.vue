@@ -24,8 +24,8 @@
     </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
 import Swal from 'sweetalert2';
 
 import Paginator from '@/modules/movies/components/Paginator.vue';
@@ -35,63 +35,51 @@ import { enviroment } from '@/env';
 import { Result } from '@/modules/movies/interfaces'
 import getPopularMovies from '@/modules/movies/composables/getPopularMovies';
 
-export default defineComponent({
-    components: {
-        paginator: Paginator,
-        card: Card,
-    },
-    setup() {
-        const { popularMovies, load } = getPopularMovies();
 
-        load();
+const { popularMovies, load } = getPopularMovies();
 
-        const imageUrl = computed(() => enviroment.imageUrl);
+load();
 
-        const prevPage = async () => {
-            if (popularMovies.value.page === 1) return;
-            await load(--popularMovies.value.page);
-        }
-        const nextPage = async () => {
-            if (popularMovies.value.page === popularMovies.value.total_pages) return;
-            await load(++popularMovies.value.page);
-        }
+const imageUrl = computed(() => enviroment.imageUrl);
 
-        const addFavorites = (movie: Result): void => {
-            // Obtenemos de localStorage
-            let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
+const prevPage = async () => {
+    if (popularMovies.value.page === 1) return;
+    await load(--popularMovies.value.page);
+}
+const nextPage = async () => {
+    if (popularMovies.value.page === popularMovies.value.total_pages) return;
+    await load(++popularMovies.value.page);
+}
 
-            // Verificamos si ya fue seleccionada como favorita
-            const existByid = favoriteList.some(movieDb => movieDb.id === movie.id);
+const addFavorites = (movie: Result): void => {
+    // Obtenemos de localStorage
+    let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
 
-            if (!existByid) {
-                favoriteList.push(movie);
-                localStorage.setItem('favorites', JSON.stringify(favoriteList));
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Added to the favorite list',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+    // Verificamos si ya fue seleccionada como favorita
+    const existByid = favoriteList.some(movieDb => movieDb.id === movie.id);
 
-            } else {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'warning',
-                    title: 'Already added to the favorite list',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            }
+    if (!existByid) {
+        favoriteList.push(movie);
+        localStorage.setItem('favorites', JSON.stringify(favoriteList));
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Added to the favorite list',
+            showConfirmButton: false,
+            timer: 1500
+        });
 
-        }
-
-        return {
-            popularMovies, imageUrl, prevPage,
-            nextPage, addFavorites,
-        };
+    } else {
+        Swal.fire({
+            position: 'center',
+            icon: 'warning',
+            title: 'Already added to the favorite list',
+            showConfirmButton: false,
+            timer: 1500
+        });
     }
-});
+
+}     
 </script>
 
 <style></style>

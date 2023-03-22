@@ -23,33 +23,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ValidateLogin } from '@/modules/auth/interfaces'
-import Swal from "sweetalert2";
+const store = useStore();
+const { push } = useRouter();
 
+const user = ref<ValidateLogin>({
+  username: 'EdwinDiaz933',
+  password: 'Stryder357',
+  request_token: '',
+});
 
-export default defineComponent({
-  setup() {
-    const store = useStore();
-    const { push } = useRouter();
+const handleSubmit = () => {
+  store.dispatch('auth/login', user.value);
+  push({ path: '/movies/popular', replace: true });
+}
 
-    const user = ref<ValidateLogin>({
-      username: 'EdwinDiaz933',
-      password: 'Stryder357',
-      request_token: '',
-    });
-
-    const handleSubmit = () => {
-      store.dispatch('auth/login', user.value);
-      push({ path: '/movies/popular', replace: true });
-    }
-
-    return { handleSubmit, user };
-  }
-})
 </script>
 
 <style></style>
