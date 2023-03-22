@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import authStore from '@/modules/auth/store';
+import moviesStore from '@/modules/movies/store';
 export default createStore({
   state: {
   },
@@ -13,6 +14,10 @@ export default createStore({
     auth: {
       namespaced: true,
       ...authStore
+    },
+    movies:{
+      namespaced:true,
+      ...moviesStore
     }
   }
 });

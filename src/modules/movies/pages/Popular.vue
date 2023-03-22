@@ -4,7 +4,8 @@
             <paginator :PopularMovies="popularMovies" @on-next="nextPage" @on-prev="prevPage"></paginator>
         </div>
 
-        <div class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
+        <div v-if="popularMovies.results"
+            class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
             <card :popularMovies="popularMovies">
                 <template #fav="{ movie }">
 
@@ -26,6 +27,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
+import { useStore } from 'vuex'
 import Swal from 'sweetalert2';
 
 import MovieService from '@/modules/movies/services';
@@ -35,30 +37,21 @@ import Card from '@/modules/movies/components/Card.vue';
 import { enviroment } from '@/env';
 import { PopularMovies, Result } from '@/modules/movies/interfaces'
 
-const popularMovies = ref<PopularMovies>({
-    page: 1,
-    results: [],
-    total_pages: 1,
-    total_results: 1,
-});
+const store = useStore();
 
-MovieService.getPopularMovies()
-    .then(movies => {
-        popularMovies.value = movies;
-    });
+store.dispatch('movies/getPopularMovies');
 
+const popularMovies = computed(() => store.state.movies.popularMovies);
 
 const imageUrl = computed(() => enviroment.imageUrl);
 
 const prevPage = () => {
     if (popularMovies.value.page === 1) return;
-    MovieService.getPopularMovies(--popularMovies.value.page)
-        .then(movies => popularMovies.value = movies);
+    store.dispatch('movies/getPopularMovies', --popularMovies.value.page);
 }
 const nextPage = () => {
     if (popularMovies.value.page === popularMovies.value.total_pages) return;
-    MovieService.getPopularMovies(++popularMovies.value.page)
-        .then(movies => popularMovies.value = movies);
+    store.dispatch('movies/getPopularMovies', ++popularMovies.value.page);
 }
 
 const addFavorites = (movie: Result): void => {

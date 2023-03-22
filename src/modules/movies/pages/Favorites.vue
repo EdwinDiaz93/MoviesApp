@@ -1,8 +1,8 @@
 <template>
     <div class="flex flex-wrap flex-col ">
-        <div v-if="popularMovies.results.length"
+        <div v-if="favoriteMovies.results.length"
             class=" h-48 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-2 gap-2 ">
-            <card :popularMovies="popularMovies">
+            <card :popularMovies="favoriteMovies">
                 <template #fav="{ movie }">
                     <button @click="() => removeFavorites(movie)"
                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white border-2 bg-red-600 rounded-md hover:text-red-600 hover:border-red-600 hover:bg-white transition-all ease-out duration-700">
@@ -22,46 +22,21 @@
 
 <script lang="ts" setup>
 import { computed, ref } from "vue";
+import { useStore } from "vuex";
 import { enviroment } from "@/env";
-import { Result, PopularMovies } from '@/modules/movies/interfaces';
+import { Result} from '@/modules/movies/interfaces';
 
 import Card from '@/modules/movies/components/Card.vue';
 import Swal from "sweetalert2";
-import MoviesService from "../services";
 
 const imageUrl = computed(() => enviroment.imageUrl);
+const store = useStore();
 
+store.dispatch('movies/getFavoriteMovies');
 
-const popularMovies = ref<PopularMovies>({
-    page: 1,
-    results: [],
-    total_pages: 1,
-    total_results: 1,
-});
+const favoriteMovies = computed(() => store.state.movies.favoriteMovies);
 
-MoviesService.getFavorites().then(
-    (movies) => {
-        popularMovies.value = movies;
-    }
-);
-
-
-const removeFavorites = (movie: Result): void => {
-    console.log('hey');
-    // // Obtenemos de localStorage
-    // let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
-
-    // favoriteList = favoriteList.filter(movieDb => movieDb.id !== movie.id);
-    // localStorage.setItem('favorites', JSON.stringify(favoriteList));
-    // popularMovies.value.results = favoriteList;
-    // Swal.fire({
-    //     position: 'center',
-    //     icon: 'success',
-    //     title: 'Deleted succesfully',
-    //     showConfirmButton: false,
-    //     timer: 1500
-    // });
-}
+const removeFavorites = (movie: Result): void => { console.log('hey'); }
 
 </script>
 
