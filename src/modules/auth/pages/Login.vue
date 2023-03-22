@@ -3,7 +3,7 @@
 
     <form @submit.prevent="handleSubmit" autoComplete='off'
       class=' w-auto sm:w-1/3 h-auto px-5 py-10 shadow-2xl grid grid-cols-1 gap-1'>
-      <h2 class='text-center text-2xl md:text-4xl font-bold mb-2'>Login Form</h2>
+      <h2 class='text-center text-2xl md:text-4xl font-bold mb-2'>Login Form</h2>      
       <p v-if="loginError.status" class="font-semibold text-center text-red-500">{{ loginError.message }}</p>
       <div class='grid grid-cols-1 gap-1'>
         <label for='email' class='font-bold'>Username:</label>

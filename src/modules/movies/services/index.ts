@@ -14,7 +14,7 @@ class MoviesService extends HttpFactory {
     }
 
     static async getPopularMovies(page: number = 1): Promise<PopularMovies> {
-        const response = await fetch(`${enviroment.baseUrl}/3/movie/popular?api_key=${enviroment.api_key}&page=${page}`);
+        const response = await fetch(`${enviroment.baseUrl}3/movie/popular?api_key=${enviroment.api_key}&page=${page}`);
         const result = response.json();
         return result;
     }

@@ -14,7 +14,7 @@ class AuthService extends HttpFactory {
 
     static async validateToken(user: LoginCredentials): Promise<TokenResponse> {
         try {
-            return this.post(`${enviroment.baseUrl}/3/authentication/token/validate_with_login?api_key=${enviroment.api_key}`, 'POST', user);
+            return this.post(`${enviroment.baseUrl}3/authentication/token/validate_with_login?api_key=${enviroment.api_key}`, 'POST', user);
         } catch (error: any) {
             throw new Error(error);
         }
@@ -22,7 +22,7 @@ class AuthService extends HttpFactory {
 
     static async getAccountId(session_id: string): Promise<Profile> {
         try {
-            return this.get(`${enviroment.baseUrl}/3/account?api_key=${enviroment.api_key}&session_id=${session_id}`);
+            return this.get(`${enviroment.baseUrl}3/account?api_key=${enviroment.api_key}&session_id=${session_id}`);
         } catch (error: any) {
             throw new Error(error);
         }
