@@ -34,7 +34,7 @@ export default defineComponent({
         const popularMovies = computed(() => props.PopularMovies);
         return { popularMovies }
     }
-})
+});
 </script>
 
 <style></style>

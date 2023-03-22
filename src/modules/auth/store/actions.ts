@@ -16,8 +16,14 @@ const actions = {
 
             if (validatedUser.success) {
                 const session = await AuthService.createSessionId(validatedUser.request_token);
-                const { username } = credentials;
-                const payload = { username, session_id: session.session_id };
+                const account = await AuthService.getAccountId(session.session_id!);
+
+                const payload = {
+                    username: credentials.username,
+                    session_id: session.session_id,
+                    account_id: account.id
+                };
+
                 commit('setSession', payload);
                 localStorage.setItem('user', JSON.stringify(payload));
                 commit('setLoginError', { status: false, message: '' });

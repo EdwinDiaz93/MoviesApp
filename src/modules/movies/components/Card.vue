@@ -42,7 +42,7 @@ export default defineComponent({
 
         return { popularMovies, imageUrl };
     }
-})
+});
 </script>
 
 <style></style>

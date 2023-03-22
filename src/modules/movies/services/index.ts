@@ -1,14 +1,25 @@
 import HttpFactory from '@/factory';
+import { MarkResponse, PopularMovies } from '../interfaces';
 
-const MoviesService: HttpFactory = {
+class MoviesService extends HttpFactory {
 
-    get: function <T>(method: string, url: string, data?: object | undefined): Promise<T> {
-        throw new Error('Function not implemented.');
-    },
-    post: function <T>(method: string, url: string, data?: object | undefined): Promise<T> {
-        throw new Error('Function not implemented.');
+    static async getFavorites(url: string): Promise<PopularMovies> {
+        const response = await fetch(url);
+        const result = response.json();
+        return result;
     }
-};
+    static async markAsFavorite(url: string, method: string, data?: object): Promise<MarkResponse> {
+        const response = await fetch(url, {
+            method,
+            body: JSON.stringify(data),
+            headers:{
+                'content-type':'application/json',
+            }
+        });
+        const result = await response.json();
+        return result;
+    }
+}
 
 
 export default MoviesService;

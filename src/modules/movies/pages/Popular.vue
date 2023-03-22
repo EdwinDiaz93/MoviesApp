@@ -28,6 +28,7 @@
 import { computed } from 'vue'
 import Swal from 'sweetalert2';
 
+import MovieService from '@/modules/movies/services';
 import Paginator from '@/modules/movies/components/Paginator.vue';
 import Card from '@/modules/movies/components/Card.vue';
 
@@ -52,33 +53,42 @@ const nextPage = async () => {
 }
 
 const addFavorites = (movie: Result): void => {
-    // Obtenemos de localStorage
-    let favoriteList: Result[] = JSON.parse(localStorage.getItem('favorites')!) || [];
 
-    // Verificamos si ya fue seleccionada como favorita
-    const existByid = favoriteList.some(movieDb => movieDb.id === movie.id);
 
-    if (!existByid) {
-        favoriteList.push(movie);
-        localStorage.setItem('favorites', JSON.stringify(favoriteList));
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Added to the favorite list',
-            showConfirmButton: false,
-            timer: 1500
+    const user = JSON.parse(localStorage.getItem('user')!) || null;
+
+    if (!user) return;
+
+    const favorite = {
+        media_type: "movie",
+        media_id: movie.id,
+        favorite: true
+    };
+
+    MovieService
+        .markAsFavorite(`${enviroment.baseUrl}3/account/${user.account_id}/favorite?api_key=${enviroment.api_key}&session_id=${user.session_id}`, 'POST', favorite)
+        .then(markResponse => {
+            if (markResponse.status_code === 1) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Marked as a favorite movie',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+
+            if (markResponse.status_code === 12) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'info',
+                    title: 'Already marked as a favorite movie',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+
         });
-
-    } else {
-        Swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: 'Already added to the favorite list',
-            showConfirmButton: false,
-            timer: 1500
-        });
-    }
-
 }     
 </script>
 
